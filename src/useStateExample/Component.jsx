@@ -1,32 +1,51 @@
-
 import {Button} from 'react-bootstrap';
 import {Card} from "react-bootstrap";
 //import Button from 'react-bootstrap/Button';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+
+function Timer({intervalValure}) {
+    const [value, setValue] = useState(0);
+    useEffect(() => {
+    }, []);
+    return <>
+        <h1>Timer</h1>
+        <h2>{value}</h2>
+    </>
+}
 
 export function Component() {
 
     const [count, setCount] = useState(1)
     const [variant, setVariant] = useState("primary")
-    return <>
-            <h1> What in React? </h1>
+    const [intervalValue, setIntervalValue] = useState();
+    const hendleIntervalClick = (ms) => {
+        setIntervalValue(ms)
+    }
 
-            <Card>
-                <Card.Body>A JavaScript library for building</Card.Body>
-            </Card>
-            <Button variant={variant} onClick={() => {
-                setCount((count) => count + 1)
-                setVariant(() => "primary")
-            }} onContextMenu={
-                (e) => {
-                    setCount((count) => count - 1)
-                    setVariant(() => "secondary")
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }>
-                count is {count}
-            </Button>{' '}
+    return <>
+        <h1> What in React? </h1>
+
+        <Card>
+            <Card.Body>A JavaScript library for building</Card.Body>
+            <Timer intervalValure={intervalValue}></Timer>
+            <Button variant="success" onClick={() => hendleIntervalClick(100)}>100ms</Button>
+            <Button variant="warning" onClick={() => hendleIntervalClick(500)}>500ms</Button>
+            <Button variant="danger" onClick={() => hendleIntervalClick(1000)}>1sec</Button>
+        </Card>
+        <Button variant={variant} onClick={() => {
+            setCount((count) => count + 1)
+            setVariant(() => "primary")
+        }} onContextMenu={
+            (e) => {
+                setCount((count) => count - 1)
+                setVariant(() => "secondary")
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }>
+            count is {count}
+        </Button>{' '}
         <Button variant="primary">Primary</Button>{' '}
         <Button variant="secondary">Secondary</Button>{' '}
         <Button variant="success">Success</Button>{' '}

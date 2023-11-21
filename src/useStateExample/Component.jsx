@@ -4,10 +4,18 @@ import {Card} from "react-bootstrap";
 import {useEffect, useState} from "react";
 
 
-function Timer({intervalValure}) {
+function Timer({intervalValue=100}) {
     const [value, setValue] = useState(0);
-    useEffect(() => {
-    }, []);
+useEffect(() => {
+    const intervalId = setInterval(() => {
+            setValue((value) => value + 1)
+        }, intervalValue)
+if(intervalValue>4000){clearInterval(intervalId);}
+        return ()=>{
+            clearInterval(intervalId);
+        }
+
+    }, [intervalValue]);
     return <>
         <h1>Timer</h1>
         <h2>{value}</h2>
@@ -28,10 +36,11 @@ export function Component() {
 
         <Card>
             <Card.Body>A JavaScript library for building</Card.Body>
-            <Timer intervalValure={intervalValue}></Timer>
+            <Timer intervalValue={intervalValue}></Timer>
             <Button variant="success" onClick={() => hendleIntervalClick(100)}>100ms</Button>
             <Button variant="warning" onClick={() => hendleIntervalClick(500)}>500ms</Button>
             <Button variant="danger" onClick={() => hendleIntervalClick(1000)}>1sec</Button>
+            <Button variant="info" onClick={() => hendleIntervalClick(5000)}>Stop</Button>
         </Card>
         <Button variant={variant} onClick={() => {
             setCount((count) => count + 1)

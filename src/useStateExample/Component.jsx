@@ -26,17 +26,18 @@ import {useState} from 'react';
 import axios from 'axios';
 
 const MyComponent = () => {
-    const [userInputValue, setUserInputValue] = useState([]);
-    const [response, setResponse] = useState([]);
+    const [userInputValue, setUserInputValue] = useState('');
+    const [response, setResponse] = useState('');
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const userInput = e.target.elements.userInput.value;
-        setUserInputValue(userInputValue => [...userInputValue, userInput]);
+        setUserInputValue(userInput);
 
         const API_KEY = 'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
         try {
-            const res = await axios.post("https://api.proxyapi.ru/openai/v1/chat/completions", {
+            //const res = await axios.post("https://api.proxyapi.ru/openai/v1/chat/completions", {
+            const res = await axios.post("api.proxyapi.ru/openai/v1", {
                 model: "gpt-3.5-turbo",
                 messages: [{role: "user", content: userInput}],
                 temperature: 0.7,
@@ -46,7 +47,8 @@ const MyComponent = () => {
                     "Authorization": `Bearer ${API_KEY}`
                 },
             });
-            setResponse(response => [...response, res.data.choices[0].message.content]);
+            console.log(res.data.choices)
+            setResponse( res.data.choices[0].message.content);
             e.target.elements.userInput.value = '';
         } catch (error) {
             console.error(error);

@@ -36,9 +36,10 @@ const MyComponent = () => {
 
         const API_KEY = 'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
         try {
-            //const res = await axios.post("https://api.proxyapi.ru/openai/v1/chat/completions", {
-            const res = await axios.post("api.proxyapi.ru/openai/v1", {
-                model: "gpt-3.5-turbo",
+            const res = await axios.post("api.proxyapi.ru/openai/v1/chat/completions", {
+            //const res = await axios.post("api.proxyapi.ru/openai/v1", {
+                //model: "gpt-3.5-turbo",
+                model: "gpt-3.5-turbo-1106",
                 messages: [{role: "user", content: userInput}],
                 temperature: 0.7,
             }, {
@@ -47,7 +48,7 @@ const MyComponent = () => {
                     "Authorization": `Bearer ${API_KEY}`
                 },
             });
-            console.log(res.data.choices)
+            console.log(res.data)
             setResponse( res.data.choices[0].message.content);
             e.target.elements.userInput.value = '';
         } catch (error) {
@@ -59,7 +60,7 @@ const MyComponent = () => {
         <div>
             <form onSubmit={handleFormSubmit}>
                 <input type="text" name="userInput"/>
-                <button type="submit">Enter</button>
+                <button type="submit">Ввод</button>
             </form>
 
             <div>user: {userInputValue}</div>

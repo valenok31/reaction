@@ -1,58 +1,80 @@
-import { useState, useEffect } from 'react';
-import { OpenAI } from 'openai';
-import './App.css';
+// const openai = new OpenAI('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');
 
-const openai = new OpenAI('YOUR_API_KEY_HERE');
+import {useState} from 'react';
+import axios from 'axios';
 
-function App() {
-    const [messages, setMessages] = useState([
-        { message: "Hello! I'm ChatGPT. How can I help you?", sender: "ChatGPT" }
-    ]);
-    const [input, setInput] = useState('');
 
-    const handleInputChange = (event) => {
-        setInput(event.target.value);
-    };
+import OpenAI from "openai";
 
-    const handleSendMessage = async () => {
-        const newMessage = { message: input, sender: "user" };
-        setMessages([...messages, newMessage]);
-        setInput('');
+const openai = new OpenAI({
+    apiKey: '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', dangerouslyAllowBrowser: true
+});
+
+
+const App = () => {
+    const [userInputValue, setUserInputValue] = useState('');
+    const [response, setResponse] = useState('');
+    const [context, setContext] = useState(null);
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        const userInput = e.target.elements.userInput.value;
+        setUserInputValue(userInput);
+
+        const API_KEY = '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';
+        const API_URL = 'https://api.openai.com/v1/chat/completions';
+        //const API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+        //const API_URL = 'https://api.openai.com/v1/completions';
+
 
         try {
-            const response = await openai.complete({
-                engine: 'text-davinci-002',
-                prompt: `Conversation with ChatGPT:\n\nUser: ${input}\nChatGPT:`,
-                maxTokens: 150,
-                n: 1,
-                stop: '\n',
+            const response2 = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                //messages: [{role: "user", content: userInput}],
+                messages: [{role: "assistant", content: `Привет, Андрей`},
+                    {role: "user", content: userInput}],
                 temperature: 0.7,
+                max_tokens: 64,
+                top_p: 1,
+                n: 3,
             });
 
-            const chatGPTResponse = { message: response.data.choices[0].text, sender: "ChatGPT" };
-            setMessages([...messages, chatGPTResponse]);
+
+            const res = await axios.post(`${API_URL}`, {
+                model: "gpt-3.5-turbo",
+                messages: [{role: "user", content: userInput}],
+                temperature: 0.7,
+                max_tokens: 64,
+                top_p: 1,
+                n: 1
+                //context: context,
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`
+                },
+            });
+            console.log(response2)
+            setResponse(res.data.choices[0].message.content);
+            setContext(response2.id);
+            e.target.elements.userInput.value = '';
         } catch (error) {
             console.error(error);
         }
     };
-
+    console.log(userInputValue)
     return (
-        <div className="App">
-            <div className="chat-container">
-                <div className="message-list">
-                    {messages.map((message, index) => (
-                        <div key={index} className={`message ${message.sender}`}>
-                            <p>{message.message}</p>
-                        </div>
-                    ))}
-                </div>
-                <div className="input-container">
-                    <input type="text" value={input} onChange={handleInputChange} />
-                    <button onClick={handleSendMessage}>Send</button>
-                </div>
-            </div>
+        <div>
+            <form onSubmit={handleFormSubmit}>
+                <input type="text" name="userInput"/>
+                <button type="submit">Ввод</button>
+            </form>
+
+            <div>user: {userInputValue}</div>
+            <div>chatGPT: {response}</div>
+            <div>context: {context}</div>
         </div>
     );
-}
+};
 
 export default App;

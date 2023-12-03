@@ -1,80 +1,40 @@
-//import {Button} from 'react-bootstrap';
-//import {Card} from "react-bootstrap";
-//import Button from 'react-bootstrap/Button';
-//import {useEffect, useState} from "react";
 
-/*export const Card = () => {
-
-    return <>
-        <Button variant="primary">Primary</Button>{' '}
-        <Button variant="secondary">Secondary</Button>{' '}
-        <Button variant="success">Success</Button>{' '}
-        <Button variant="warning">Warning</Button>{' '}
-        <Button variant="danger">Danger</Button>{' '}
-        <Button variant="info">Info</Button>{' '}
-        <Button variant="light">Light</Button>{' '}
-        <Button variant="dark">Dark</Button>
-        <Button variant="link">Link</Button>
-    </>
-
-}*/
+import OpenAI from "openai";
+import {useState} from "react";
 
 
-//           const API_KEY = 'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
+const openai = new OpenAI({
+    apiKey: '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',
+    dangerouslyAllowBrowser: true
+});
 
-import {useState} from 'react';
-import axios from 'axios';
-
-const MyComponent = () => {
-    const [userInputValue, setUserInputValue] = useState('');
-    const [response, setResponse] = useState('');
-
+const ComponentA = () => {
+    const [img, setImg] = useState(null);
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const userInput = e.target.elements.userInput.value;
-        setUserInputValue(userInput);
-
-        const API_KEY = 'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
         try {
-            const res = await axios.post("api.proxyapi.ru/openai/v1/chat/completions", {
-            //const res = await axios.post("api.proxyapi.ru/openai/v1", {
-                //model: "gpt-3.5-turbo",
-                model: "gpt-3.5-turbo-1106",
-                messages: [{role: "user", content: userInput}],
-                temperature: 0.7,
-            }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${API_KEY}`
-                },
+            const completion = await openai.images.generate({
+                //model: "dall-e-3",
+                model: "dall-e-2",
+                size:'256x256',
+                prompt: "a white siamese cat",
             });
-            console.log(res.data)
-            setResponse( res.data.choices[0].message.content);
-            e.target.elements.userInput.value = '';
+
+           let  image_url = completion.data[0].url;
+            setImg(image_url);
+            console.log(completion)
         } catch (error) {
             console.error(error);
         }
     };
-    console.log(userInputValue)
     return (
         <div>
             <form onSubmit={handleFormSubmit}>
-                <input type="text" name="userInput"/>
-                <button type="submit">Ввод</button>
+                <button type="submit" >Рисовать</button>
             </form>
-
-            <div>user: {userInputValue}</div>
-            <div>chatGPT: {response}</div>
-            {/*{response && <p>{response}</p>}*/}
+            {img && <img src={img} alt=''/>}
         </div>
     );
 };
 
-export default MyComponent;
-
-
-
-
-
-
-
+export default ComponentA;

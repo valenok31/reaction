@@ -14,7 +14,6 @@ const ComponentA = () => {
         e.preventDefault();
         try {
             const completion = await openai.images.generate({
-                //model: "dall-e-3",
                 model: "dall-e-2",
                 size:'256x256',
                 prompt: "a white siamese cat",
@@ -36,5 +35,6 @@ const ComponentA = () => {
         </div>
     );
 };
+
 
 export default ComponentA;

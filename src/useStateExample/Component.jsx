@@ -10,6 +10,8 @@ const openai = new OpenAI({
 
 const ComponentA = () => {
     const [img, setImg] = useState(null);
+    const [userInputValue, setUserInputValue] = useState('');
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {

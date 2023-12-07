@@ -5,7 +5,7 @@ import ComponentA from "./useStateExample/Component";
 
 
 const openai = new OpenAI({
-    apiKey: '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',
+    apiKey: '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',
     dangerouslyAllowBrowser: true
 });
 

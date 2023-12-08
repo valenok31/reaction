@@ -1,16 +1,15 @@
 import {useState} from 'react';
-import axios from 'axios';
 import OpenAI from "openai";
 import ComponentA from "./useStateExample/Component";
 
 
 const openai = new OpenAI({
-    apiKey: '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',
+    apiKey: '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',
     dangerouslyAllowBrowser: true
 });
 
 const App = () => {
-    const opis = 'андрей'
+    const opis = 'Я - Юрий Александрович Дудь - российский журналист, видеоблогер, теле- и радиоведущий. Я родился 11 октября 1986 года в Потсдаме, ГДР ¹. Я являюсь главным редактором издания Sports.ru (2011-2018) и ведущим авторского канала на YouTube под названием «вДудь». Я получил известность благодаря своим документальным фильмам и интервью с известными личностями. В 2022 году меня внесли в список иностранных агентов. Я женат на Ольге Дудь, у них есть двое детей - дочь Алена и сын Данила';
 
     const [userInputValue, setUserInputValue] = useState('');
     const [response, setResponse] = useState('');
@@ -18,29 +17,18 @@ const App = () => {
         role: "user",
         content: opis,
     }]);
-    //const [context, setContext] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false); // Новое состояние
-
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const userInput = e.target.elements.userInput.value;
         setUserInputValue(userInput);
 
-        const API_KEY = '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';
-        const API_URL = 'https://api.openai.com/v1/chat/completions';
-        //const API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
-        //const API_URL = 'https://api.openai.com/v1/completions';
-
-        //const prompt = [...context, {role: "user", content: userInput}];
-
-
         try {
 
             setIsSubmitting(true);
             console.log(context)
             const completion = await openai.chat.completions.create({
-                //model: "gpt-3.5-turbo",
                 model: "gpt-3.5-turbo",
                 messages: [...context, {role: "user", content: userInput}],
                 temperature: 0.7,
@@ -57,24 +45,6 @@ const App = () => {
             setContext((contextOld) => [...contextOld, addContextUser]);
             e.target.elements.userInput.value = '';
 
-            /*           const res = await axios.post(`${API_URL}`, {
-                           model: "gpt-3.5-turbo",
-                           messages: prompt,
-                           temperature: 0.7,
-                           max_tokens: 64,
-                           top_p: 1,
-                           n: 1
-                       }, {
-                           headers: {
-                               "Content-Type": "application/json",
-                               "Authorization": `Bearer ${API_KEY}`
-                           },
-                       });
-                       console.log(res.data)
-                       setResponse(res.data.choices[0].message.content);
-                       setContext(res.data.choices[0].message);*/
-
-
             setTimeout(() => {
                 setIsSubmitting(false);
                 console.log(context)
@@ -85,7 +55,7 @@ const App = () => {
             setIsSubmitting(false);
         }
     };
-    //console.log(userInputValue)
+
     return (
         <div>
             <form onSubmit={handleFormSubmit}>

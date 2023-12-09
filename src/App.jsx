@@ -65,10 +65,8 @@ const App = () => {
 
             <div>user: {userInputValue}</div>
             <div>chatGPT: {response}</div>
-
             <ComponentA/>
         </div>
     );
 };
-
 export default App;

@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react';
 import axios from "axios";
 
-let API_KEY = 11//'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
+let API_KEY = 'sk-mSsCaXW00kqnhIYaLw3sLFP9ucqwKd1j';
 
 
 const ImageComponent = () => {
